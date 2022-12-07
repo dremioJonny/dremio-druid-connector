@@ -37,7 +37,7 @@ import io.protostuff.Tag;
 /**
  * Configuration for Druid.
  */
-@SourceType(value = "DRUID", label = "Druid", uiConfig = "druid-layout.json", externalQuerySupported = true)
+@SourceType(value = "DRUID", label = "Druid", uiConfig = "druid-layout.json", externalQuerySupported = true, previewEngineRequired = true)
 public class DruidConf extends AbstractArpConf<DruidConf> {
 
     private static final String ARP_FILENAME = "arp/implementation/druid-arp.yaml";
