@@ -283,12 +283,12 @@ relational_algebra:
       default_nulls_ordering: high
     fetch_offset:
       offset_fetch:
-        enable: true
+        enable: false
         format: 'LIMIT {1} OFFSET {0}'
       offset_only:
         enable: false
       fetch_only:
-        enable: true
+        enable: false
         format: 'LIMIT {0}'
 
   union:

@@ -19,7 +19,6 @@ package com.dremio.exec.store.jdbc.conf;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Properties;
-import com.dremio.exec.store.jdbc.*;
 import com.dremio.options.OptionManager;
 import com.dremio.security.CredentialsService;
 import org.apache.log4j.Logger;
@@ -27,11 +26,14 @@ import com.dremio.exec.catalog.conf.DisplayMetadata;
 import com.dremio.exec.catalog.conf.NotMetadataImpacting;
 import com.dremio.exec.catalog.conf.Secret;
 import com.dremio.exec.catalog.conf.SourceType;
-import com.dremio.exec.store.jdbc.JdbcPluginConfig;
 import com.dremio.exec.store.jdbc.dialect.arp.ArpDialect;
 import com.dremio.exec.store.jdbc.dialect.arp.ArpYaml;
+import com.dremio.exec.store.jdbc.JdbcPluginConfig;
+import com.dremio.exec.store.jdbc.CloseableDataSource;
+import com.dremio.exec.store.jdbc.DataSources;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.annotations.VisibleForTesting;
+import com.dremio.exec.store.jdbc.dialect.DruidDialect;
 import io.protostuff.Tag;
 
 /**
@@ -45,33 +47,6 @@ public class DruidConf extends AbstractArpConf<DruidConf> {
             AbstractArpConf.loadArpFile(ARP_FILENAME, (DruidDialect::new));
     private static final String DRIVER = "org.apache.calcite.avatica.remote.Driver";
     private static Logger logger = Logger.getLogger(DruidConf.class);
-
-    static class DruidSchemaFetcher extends JdbcSchemaFetcherImpl {
-
-        public DruidSchemaFetcher(JdbcPluginConfig config) {
-            super(config);
-        }
-
-        protected boolean usePrepareForColumnMetadata() {
-            return true;
-        }
-    }
-
-    static class DruidDialect extends ArpDialect {
-
-        public DruidDialect(ArpYaml yaml) {
-            super(yaml);
-        }
-
-        @Override
-        public JdbcSchemaFetcherImpl newSchemaFetcher(JdbcPluginConfig config) {
-            return new DruidSchemaFetcher(config);
-        }
-
-        public boolean supportsNestedAggregations() {
-            return false;
-        }
-    }
 
     /*
        Check Druid JDBC connection docs for more details: https://docs.Druid.net/manuals/user-guide/jdbc-configure.html
